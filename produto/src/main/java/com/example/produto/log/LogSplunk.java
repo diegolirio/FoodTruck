@@ -42,7 +42,8 @@ public class LogSplunk {
     @Value("${spring.application.name}")
     private String applicationName;
 
-    @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
+    @Pointcut("within(@com.example.produto.log.LogDownstream *)")
+    //@Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
     public void pointcutController() {
     }
 
@@ -95,8 +96,12 @@ public class LogSplunk {
     //@Pointcut("execution(* br.com.groot.galaxy.commons.config.feign.ApacheHttpClient.*(..))")
     //@Pointcut("execution(* org.springframework.cloud.openfeign.ribbon.LoadBalancerFeignClient.execute(..))")
     //@Pointcut("within(@org.springframework.cloud.openfeign.FeignClient *)")
+
     //@Pointcut("execution(* feign.httpclient.ApacheHttpClient.*(..))")
-    @Pointcut("execution(* com.example.produto.config.ApacheHttpClient.*(..))")
+
+    //@Pointcut("execution(* com.example.produto.config.ApacheHttpClient.*(..))")
+    //@Pointcut("within(@org.springframework.cloud.openfeign.FeignClient *)")
+    @Pointcut("within(@com.example.produto.log.LogUpstream *)")
     public void feignDefaultClientPointcut() {
     }
 
