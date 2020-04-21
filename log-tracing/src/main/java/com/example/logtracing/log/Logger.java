@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Aspect
 @Component
 @EnableAspectJAutoProxy
-public class LogSplunk {
+class Logger {
 
     @Autowired
     private Tracing tracing; //Tracer
@@ -42,7 +42,7 @@ public class LogSplunk {
     @Value("${spring.application.name}")
     private String applicationName;
 
-    @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
+    @Pointcut("within(@org.springframework.web.bind.annotation.RestController *) || within(@com.example.logtracing.log.LogDownstream *)")
     public void pointcutController() {
     }
 

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class Log {
+class Log {
 
     private String level;
     private String traceId; // Request Steps
