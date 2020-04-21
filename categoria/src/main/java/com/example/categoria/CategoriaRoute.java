@@ -1,5 +1,6 @@
 package com.example.categoria;
 
+import com.example.categoria.log.LogDownstream;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.web.reactive.function.server.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static org.springframework.web.reactive.function.BodyInserters.fromPublisher;
+
 @Configuration
 public class CategoriaRoute {
 
@@ -22,13 +25,14 @@ public class CategoriaRoute {
     public RouterFunction<ServerResponse> route(CustomerHandler handler) {
         return RouterFunctions
                 .route(RequestPredicates.GET(CATEGORIAS_URL).and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::getAll)
-                .andRoute(RequestPredicates.GET(CATEGORIAS_URL.concat("/{id}")).and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::getById);
-        //.andRoute(POST("/customerss").and(accept(MediaType.APPLICATION_JSON)), handler::save);
+                .andRoute(RequestPredicates.GET(CATEGORIAS_URL.concat("/{id}")).and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::getById)
+                .andRoute(RequestPredicates.POST(CATEGORIAS_URL).and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::save);
     }
 
 }
 
 @Component
+@LogDownstream
 @RequiredArgsConstructor
 class CustomerHandler {
 
@@ -46,11 +50,11 @@ class CustomerHandler {
                 .body(customer, Categoria.class);
     }
 
-//    public Mono<ServerResponse> save(ServerRequest serverRequest) {
-//        Mono<Categoria> customerMono = serverRequest.bodyToMono(Categoria.class);
-//        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
-//                .body(HttpRequest.BodyPublishers.fromPublisher(customerMono.flatMap(service::save), Categoria.class));
-//    }
+    public Mono<ServerResponse> save(ServerRequest serverRequest) {
+        Mono<Categoria> categoriaMono = serverRequest.bodyToMono(Categoria.class);
+        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(fromPublisher(categoriaMono.flatMap(service::save), Categoria.class));
+    }
 
 }
 
@@ -63,6 +67,10 @@ class CategoriaService {
 
     public Mono<Categoria> getById(String id) {
         return Mono.just(new Categoria(1L, "Food"));
+    }
+
+    public Mono<Categoria> save(Categoria categoria) {
+        return Mono.just(categoria);
     }
 }
 

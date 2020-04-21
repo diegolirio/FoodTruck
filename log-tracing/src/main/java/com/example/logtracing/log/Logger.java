@@ -51,6 +51,9 @@ class Logger {
         Log logOut = new Log();
         logOut.setApplicationName(applicationName);
         logOut.setMethodExecution(joinPoint.toString());
+
+        // ServerHttpRequest <==== REACTIVE API
+
         final HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         logOut.getRequest().setHttpMethod(request.getMethod());
