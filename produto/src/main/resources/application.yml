@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: produto
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: *
+
+# TRACING-settings
+#opentracing:
+#  jaeger:
+#    service-name: produto
+#    enabled: TRUE
+#    udp-sender:
+#      host: localhost:6831
+
+--- 
+spring:
+  profiles: dev
+
+opentracing:
+  jaeger:
+    udp-sender:
+      host: jaeger
+      port: 6831

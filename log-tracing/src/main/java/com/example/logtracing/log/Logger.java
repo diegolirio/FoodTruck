@@ -1,10 +1,11 @@
 package com.example.logtracing.log;
 
-import brave.Tracing;
+//import brave.Tracing;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Request;
 import feign.Response;
+import io.opentracing.Tracer;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -22,9 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,8 +32,11 @@ import java.util.stream.Collectors;
 @EnableAspectJAutoProxy
 class Logger {
 
+//    @Autowired
+//    private Tracing tracing; //Tracer
+
     @Autowired
-    private Tracing tracing; //Tracer
+    private Tracer tracing;
 
     private Map<String, Log> mapReqResp = new HashMap<>();
     private Map<String, Log.RouteStep> mapSteps = new HashMap<>();
@@ -144,6 +146,13 @@ class Logger {
     public synchronized void processaAfterReturningFeignInicio(final JoinPoint jp, final Object retorno) {
         if (retorno instanceof Response) {
             final Response response = (Response) retorno;
+
+            if(response.request().headers().get("uber-trace-id").size() > 1) {
+                Object h2 = ((List) response.request().headers().get("uber-trace-id")).get(1);
+                //Collection<Object> hs = Arrays.asList(h1);
+                response.request().headers().get("uber-trace-id").remove(h2);
+            }
+
             Log.RouteStep routeStep = mapSteps.get(response.request().toString());
             routeStep.getResponse().setHttpStatus(String.valueOf(response.status()));
 
@@ -176,8 +185,10 @@ class Logger {
 //    }
 
     private String getTraceId() {
-        return this.tracing.currentTraceContext().get().traceIdString();
+        //return this.tracing.currentTraceContext().get().traceIdString();
         //return UUID.randomUUID().toString();
+        System.out.println(this.tracing.activeSpan().context().toSpanId());
+        return this.tracing.activeSpan().context().toTraceId();
     }
 
 }

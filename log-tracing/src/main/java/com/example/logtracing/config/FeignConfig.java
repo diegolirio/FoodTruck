@@ -3,6 +3,8 @@ package com.example.logtracing.config;
 import feign.Client;
 import feign.Feign;
 import feign.Logger;
+import feign.opentracing.TracingClient;
+import io.opentracing.Tracer;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.context.annotation.Bean;
@@ -15,8 +17,11 @@ public class FeignConfig {
 
     @Bean
     @Primary
-    public Feign myappFeignBuilder() {
-        return Feign.builder().contract(new SpringMvcContract()).build();
+    public Feign myappFeignBuilder(Client client, Tracer tracer) {
+        return Feign.builder()
+                .contract(new SpringMvcContract())
+                //.client()
+                .build();
     }
 
     @Bean
@@ -24,7 +29,9 @@ public class FeignConfig {
     public Client feignClient() {
 
         //return new feign.httpclient.ApacheHttpClient();
-        return new ApacheHttpClient();
+        ApacheHttpClient apacheHttpClient = new ApacheHttpClient();
+        //apacheHttpClient.
+        return apacheHttpClient;
     }
 
     @Bean

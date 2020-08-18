@@ -1,0 +1,38 @@
+version: '3'
+services:
+  jeager:
+    image: jaegertracing/all-in-one:1.18
+    container_name: jaeger
+    ports:
+      - 5775:5775
+      - 6831:6831
+      - 6832:6832
+      - 5778:5778
+      - 16686:16686
+      - 14268:14268
+      - 14250:14250
+      - 9411:9411
+  foodtruck:
+    image: diegolirio/food-truck:0.0.1-SNAPSHOT
+    container_name: foodtruck
+    #restart: always
+    ports:
+      - 8082:8082
+    environment:
+      - SERVICE_CLIENTE_URL=cliente:8081
+      - SERVICE_PRODUTO_URL=produto:8080
+  cliente:
+    image: diegolirio/cliente:0.0.1-SNAPSHOT
+    container_name: cliente
+    #restart: always
+    ports:
+      - 8081:8081
+  produto:
+    image: diegolirio/produto:0.0.1-SNAPSHOT
+    container_name: produto
+    #restart: always
+    ports:
+      - 8080:8080
+
+
+#  sudo docker run -d --name jaeger \\n  -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 \\n  -p 5775:5775/udp \\n  -p 6831:6831/udp \\n  -p 6832:6832/udp \\n  -p 5778:5778 \\n  -p 16686:16686 \\n  -p 14268:14268 \\n  -p 14250:14250 \\n  -p 9411:9411 \\n  jaegertracing/all-in-one:1.18
