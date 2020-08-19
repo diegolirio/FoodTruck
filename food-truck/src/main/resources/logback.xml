@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration  scan="true" scanPeriod="30 minutes">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                {"traceId": "%X{uber-trace-id:-}", "rota":%m}%n
+            </pattern>
+        </encoder>
+    </appender>
+
+<!--    <logger name="com.example.logtracing.log.Logger" level="OFF"/>-->
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

@@ -12,6 +12,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -91,7 +92,7 @@ class Logger {
         logOut.getResponse().setBody(retorno);
         logOut.setLevel(response.getStatus() > 199 && response.getStatus() < 300 ? "SUCCESS" : "FAILED");
         logOut.setTraceId(this.getTraceId());
-        System.out.println(objectMapper().writeValueAsString(logOut));
+        log.info(objectMapper().writeValueAsString(logOut));
     }
 
     //@Pointcut("execution(* br.com.groot.galaxy.commons.config.feign.ApacheHttpClient.*(..))")
@@ -136,9 +137,20 @@ class Logger {
 
                 Log.RouteStep step = new Log.RouteStep();
                 step.setRequest(requestStep);
-                mapSteps.put(request.toString(), step);
+                Request request1 = refine(request);
+                mapSteps.put(request1.toString(), step);
             }
         }
+    }
+
+    private Request refine(Request request) {
+        Map<String, Collection<String>> headers = new HashMap<>();
+        request.headers().forEach((keyHearderName, collection) -> {
+            if("uber-trace-id".equals(keyHearderName) && !headers.containsKey(keyHearderName)) {
+                headers.put("uber-trace-id", List.of( ((List) collection).get(0).toString()) );
+            }
+        });
+        return Request.create(request.httpMethod(), request.url(), headers, request.requestBody());
     }
 
     @SuppressWarnings("unused")
@@ -147,13 +159,8 @@ class Logger {
         if (retorno instanceof Response) {
             final Response response = (Response) retorno;
 
-            if(response.request().headers().get("uber-trace-id").size() > 1) {
-                Object h2 = ((List) response.request().headers().get("uber-trace-id")).get(1);
-                //Collection<Object> hs = Arrays.asList(h1);
-                response.request().headers().get("uber-trace-id").remove(h2);
-            }
-
-            Log.RouteStep routeStep = mapSteps.get(response.request().toString());
+            Request refine = refine(response.request());
+            Log.RouteStep routeStep = mapSteps.get(refine.toString());
             routeStep.getResponse().setHttpStatus(String.valueOf(response.status()));
 
             //final LogBuilder logBuilderFeign = mapFeignLoggers.get(response.request().toString());
@@ -187,7 +194,6 @@ class Logger {
     private String getTraceId() {
         //return this.tracing.currentTraceContext().get().traceIdString();
         //return UUID.randomUUID().toString();
-        System.out.println(this.tracing.activeSpan().context().toSpanId());
         return this.tracing.activeSpan().context().toTraceId();
     }
 
