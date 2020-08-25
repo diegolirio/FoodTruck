@@ -3,7 +3,7 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>
-                {"traceId": "%X{uber-trace-id:-}", "rota":%m}%n
+                {"traceId": "%X{X-B3-TraceId:-}", "rota":%m}%n
             </pattern>
         </encoder>
     </appender>
