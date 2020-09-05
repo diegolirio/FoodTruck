@@ -14,7 +14,7 @@
 version: '3'
 services:
   cliente:
-    image: diegolirio/cliente:0.0.1-SNAPSHOT
+    image: diegolirio/cliente:0.0.2-SNAPSHOT
     container_name: cliente
     #restart: always
     ports:
