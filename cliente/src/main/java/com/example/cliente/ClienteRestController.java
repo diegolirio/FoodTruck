@@ -11,6 +11,12 @@ import java.util.UUID;
 @RequestMapping("/clientes")
 public class ClienteRestController {
 
+//    Map<Integer, Cliente> clienteMap = new Map<Integer, Cliente>();
+//
+//    public ClienteRestController(MeterRegistry registry) {
+//        registry.mapSize("population", people);
+//    }
+
     @GetMapping("/{id}")
     public Cliente getById(@PathVariable Long id) {
         return new Cliente(id, UUID.randomUUID().toString());
