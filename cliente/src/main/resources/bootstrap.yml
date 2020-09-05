@@ -12,8 +12,8 @@ aws:
 
 cloud:
   aws:
-    #stack:
-      #auto: false
+    paramstore:
+      auto: false
     region:
       #auto: false
       static: us-east-1
@@ -27,7 +27,6 @@ spring:
 
 aws:
   secretsmanager:
-    #failFast: true
     defaultContext: liriotech
   paramstore:
     defaultContext: liriotech
