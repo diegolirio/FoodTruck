@@ -81,12 +81,12 @@ services:
 #      host: jaeger
 #      port: 6831
 
-token:
-  client: clientId
-  secret: secret123
-
-redis:
-  auth: 123456
+#token:
+#  client: clientId
+#  secret: secret123
+#
+#redis:
+#  auth: 123456
 
 aws:
   secretsmanager:
