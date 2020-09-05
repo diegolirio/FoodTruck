@@ -38,12 +38,16 @@
         <dependency>
             <groupId>com.example</groupId>
             <artifactId>log-tracing</artifactId>
-            <version>0.0.5-SNAPSHOT</version>
+            <version>0.0.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>io.reactivex</groupId>
+            <artifactId>rxjava</artifactId>
         </dependency>
     </dependencies>
 

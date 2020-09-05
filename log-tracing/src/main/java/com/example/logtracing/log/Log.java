@@ -21,6 +21,7 @@ class Log {
 
     @Data
     public static class RouteStep {
+        private String key;
         private Request request = new Request();
         private Response response = new Response();
     }

@@ -2,6 +2,20 @@ spring:
   profiles: default
   application:
     name: food-truck
+    version: 1.0.1
+
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.aws.autoconfigure.context.ContextInstanceDataAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.context.ContextCredentialsAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.context.ContextRegionProviderAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.context.ContextResourceLoaderAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.context.ContextStackAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.mail.MailSenderAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.cache.ElastiCacheAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.messaging.MessagingAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.jdbc.AmazonRdsDatabaseAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.metrics.CloudWatchExportAutoConfiguration
 
 #logging.pattern.level=%d{ABSOLUTE} [%X{traceId}/%X{spanId}] %-5p [%t] %C{2} - %m%n
 #logging.level.root=info
@@ -14,7 +28,7 @@ services:
   produto:
     url: ${SERVICE_PRODUTO_URL:localhost:8080}  
   cliente:
-    url: ${SERVICE_CLIENTE_URL:localhost:8081}  
+    url: ${SERVICE_CLIENTE_URL:ec2-54-165-20-97.compute-1.amazonaws.com:8087}
 
 # opentracing:
 #   jaeger:
@@ -22,30 +36,64 @@ services:
 #       host: jaeger
 #       port: 6831
 
+aws:
+  secretsmanager:
+    enabled: false
+  paramstore:
+    enabled: false
+
+token:
+  client: clientId
+  secret: secret123
+
+redis:
+  auth: 123456
+
 ---
 
 spring:
   profiles: dev
   application:
     name: food-truck
+    version: 1
 
 #logging.pattern.level=%d{ABSOLUTE} [%X{traceId}/%X{spanId}] %-5p [%t] %C{2} - %m%n
 #logging.level.root=info
 #logging.level.mcp.cloudtrace=info
 
-server:
-  port: 8082
-  
+#server:
+#  port: 8082
+
 services:
   produto:
     url: ${SERVICE_PRODUTO_URL:localhost:8080}  
   cliente:
     url: ${SERVICE_CLIENTE_URL:localhost:8081}  
 
-opentracing:
-  jaeger:
-    log-spans: true
-    #enable-b3-propagation: true
-    udp-sender:
-      host: jaeger
-      port: 6831
+#opentracing:
+#  jaeger:
+#    log-spans: true
+#    #enable-b3-propagation: true
+#    udp-sender:
+#      host: jaeger
+#      port: 6831
+
+token:
+  client: clientId
+  secret: secret123
+
+#redis:
+#  auth: 123456
+
+aws:
+  secretsmanager:
+    defaultContext: liriotech
+  paramstore:
+    defaultContext: liriotech
+
+cloud:
+  aws:
+    region:
+      static: us-east-1
+
+

@@ -5,7 +5,8 @@ spring:
 
 aws:
   secretsmanager:
-    enabled: false
+    failFast: false
+    #enabled: false
   paramstore:
     enabled: false
 
@@ -17,7 +18,6 @@ cloud:
       #auto: false
       static: us-east-1
 
-
 ---
 
 spring:
@@ -27,6 +27,9 @@ spring:
 
 aws:
   secretsmanager:
+    #failFast: true
+    defaultContext: liriotech
+  paramstore:
     defaultContext: liriotech
 
 cloud:

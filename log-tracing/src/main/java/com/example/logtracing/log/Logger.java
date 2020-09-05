@@ -5,7 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Request;
 import feign.Response;
+import io.micrometer.core.instrument.util.IOUtils;
 import io.opentracing.Tracer;
+import kotlin.text.Charsets;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -137,10 +139,17 @@ class Logger {
 
                 Log.RouteStep step = new Log.RouteStep();
                 step.setRequest(requestStep);
-                Request request1 = refine(request);
-                mapSteps.put(request1.toString(), step);
+                //String stepMapKey = refine(request).toString();
+                String stepMapKey = this.getStepMapKey(request);
+                step.setKey(stepMapKey);
+                mapSteps.put(stepMapKey, step);
             }
         }
+    }
+
+    private String getStepMapKey(Request request) {
+        //return this.refine(request).toString();
+        return String.valueOf(Thread.currentThread().getId());
     }
 
     private Request refine(Request request) {
@@ -155,12 +164,14 @@ class Logger {
 
     @SuppressWarnings("unused")
     @AfterReturning(pointcut = "feignDefaultClientPointcut()", returning = "retorno")
-    public synchronized void processaAfterReturningFeignInicio(final JoinPoint jp, final Object retorno) {
+    public synchronized void processaAfterReturningFeignInicio(final JoinPoint jp, final Object retorno) throws IOException {
         if (retorno instanceof Response) {
             final Response response = (Response) retorno;
 
-            Request refine = refine(response.request());
-            Log.RouteStep routeStep = mapSteps.get(refine.toString());
+            //Request refine = refine(response.request());
+            String stepMapKey = this.getStepMapKey(response.request());
+            //Log.RouteStep routeStep = mapSteps.get(refine.toString());
+            Log.RouteStep routeStep = mapSteps.get(stepMapKey);
             routeStep.getResponse().setHttpStatus(String.valueOf(response.status()));
 
             //final LogBuilder logBuilderFeign = mapFeignLoggers.get(response.request().toString());
@@ -171,11 +182,12 @@ class Logger {
             }));
             final String traceId = getTraceId();
             //logBuilderFeign.add(logParamHeader);
-            //mapFeignLoggers.remove(response.request().toString());
+            mapSteps.remove(stepMapKey);
             //mapFeignLoggers.put(new StringBuilder(String.valueOf(response.headers().get("date"))
             //                + String.valueOf(response.headers().get("set-cookie")) + traceId).toString().replaceAll("\\[", "").replaceAll("\\]", ""),
             //        logBuilderFeign);
 
+            routeStep.getResponse().setBody(response.body());
             Log log = mapReqResp.get(traceId);
             log.getSteps().add(routeStep);
             mapReqResp.put(traceId, log);

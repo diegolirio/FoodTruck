@@ -1,5 +1,6 @@
 package com.example.foodtruck;
 
+import com.example.foodtruck.infraestrutura.cliente.Cliente;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,16 @@ public class PedidoController {
         Pedido pedido = this.service.gerarNovo(pedidoNovo);
         perCustomerMessages.increment(pedido.toString());
         return pedido;
+    }
+
+    @GetMapping("/thead-id")
+    public List<Cliente> getByCliente() {
+        int n = 10;
+        List<Long> ids = new ArrayList<>();
+        for(long i = 0; i < n; i++) {
+            ids.add(i);
+        }
+        return this.service.threadId(ids);
     }
 
 }
