@@ -1,0 +1,11 @@
+version: '3'
+services:
+  foodtruck:
+    image: diegolirio/food-truck:0.0.1-SNAPSHOT
+    container_name: foodtruck
+    #restart: always
+    ports:
+      - 8082:8082
+    environment:
+      - SERVICE_CLIENTE_URL=cliente:8081
+      - SERVICE_PRODUTO_URL=produto:8080
