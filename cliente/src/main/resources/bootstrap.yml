@@ -2,12 +2,12 @@ spring:
   profiles: default
   application:
     name: cliente
-#
-#aws:
-#  secretsmanager:
-#    enabled: false
-#  paramstore:
-#    enabled: false
+
+aws:
+  secretsmanager:
+    enabled: false
+  paramstore:
+    enabled: false
 
 ---
 
