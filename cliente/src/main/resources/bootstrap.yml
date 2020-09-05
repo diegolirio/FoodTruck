@@ -1,0 +1,28 @@
+spring:
+  profiles: default
+  application:
+    name: cliente
+#
+#aws:
+#  secretsmanager:
+#    enabled: false
+#  paramstore:
+#    enabled: false
+
+---
+
+spring:
+  profiles: dev
+  application:
+    name: cliente
+
+cloud:
+  aws:
+    region:
+      static: us-east-1
+
+#opentracing:
+#  jaeger:
+#    udp-sender:
+#      host: jaeger
+#      udp-sender.port: 6831
