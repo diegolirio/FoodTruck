@@ -11,8 +11,12 @@ aws:
 
 cloud:
   aws:
+    #stack:
+      #auto: false
     region:
+      #auto: false
       static: us-east-1
+
 
 ---
 
