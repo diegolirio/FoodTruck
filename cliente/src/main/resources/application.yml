@@ -24,6 +24,9 @@ token:
   client: clientId
   secret: secret123
 
+redis:
+  auth: 123456
+
 management:
   endpoint:
     metrics:

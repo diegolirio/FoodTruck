@@ -1,3 +1,4 @@
+cd ..
 cd produto
 sudo mvn clean package docker:build
 cd ../cliente

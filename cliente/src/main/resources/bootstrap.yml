@@ -25,6 +25,10 @@ spring:
   application:
     name: cliente
 
+aws:
+  paramstore:
+    defaultContext: liriotech
+
 cloud:
   aws:
     region:
