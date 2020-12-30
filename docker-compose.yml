@@ -3,9 +3,15 @@ services:
   cassandra:
     image: cassandra
     container_name: cassandra
-    ports: 
-      - 9042:9042
+    ports:
+      - '7000:7000'
+      - '9042:9042'
+    # volumes:
+    #   - 'cassandra_data:/bitnami'
     environment:
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_USER=user
+      - CASSANDRA_PASSWORD=jeager1
       - CASSANDRA_TRANSPORT_PORT_NUMBER=7000
       - CASSANDRA_CQL_PORT_NUMBER=9042
     networks:
@@ -27,7 +33,11 @@ services:
       - SPAN_STORAGE_TYPE=cassandra
       - CASSANDRA_SERVERS=cassandra
       - CASSANDRA_PORT=9042
+      - CASSANDRA_KEYSPACE=jeager_v1
+      - CASSANDRA_USERNAME=user
+      - CASSANDRA_PASSWORD=jeager1
       - CASSANDRA_SPAN_STORE_WRITE_CACHE_TTL=0h1m00s # --cassandra.span-store-write-cache-ttl=0h1m5s
+
       #- BADGER_SPAN_STORE_TTL=0h1m00s
       #- SPAN_STORAGE_TYPE=badger
       #- BADGER_EPHEMERAL=false
@@ -55,14 +65,15 @@ services:
   #   #restart: always
   #   ports:
   #     - 8081:8081
-  produto:
-    image: diegolirio/produto:0.0.1-SNAPSHOT
-    container_name: produto
-    #restart: always
-    ports:
-      - 8080:8080
-    networks:
-      - jaeger      
+  
+  # produto:
+  #   image: diegolirio/produto:0.0.1-SNAPSHOT
+  #   container_name: produto
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     - jaeger      
+
   # prometheus:
   #   image: prom/prometheus:latest
   #   container_name: prometheus

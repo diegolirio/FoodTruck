@@ -1,7 +1,7 @@
 spring:
   application:
     name: produto
-
+    version: 1.0.0
 #management:
 #  endpoints:
 #    web:
@@ -23,5 +23,5 @@ spring:
 opentracing:
   jaeger:
     udp-sender:
-      host: jaeger
+      host: ${JEAGER_AGENT:jaeger-agent}
       port: 6831
