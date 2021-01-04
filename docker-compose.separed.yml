@@ -52,7 +52,7 @@ services:
         - cassandra
       environment:
         - TRACE_TTL=30
-
+        #- dependencies_ttl=0
 
     produto:
       image: diegolirio/produto:0.0.2-SNAPSHOT
