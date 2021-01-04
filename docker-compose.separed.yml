@@ -3,6 +3,7 @@ version: '2'
 services:
     jaeger-collector:
       image: jaegertracing/jaeger-collector
+      container_name: jeager-collector
       command: ["--cassandra.keyspace=jaeger_v1_dc1", "--cassandra.servers=cassandra", "--collector.zipkin.http-port=9411", "--cassandra.span-store-write-cache-ttl=0h1m5s"]
       ports:
         - "14269"
@@ -18,6 +19,7 @@ services:
 
     jaeger-query:
       image: jaegertracing/jaeger-query
+      container_name: jeager-query
       command: ["--cassandra.keyspace=jaeger_v1_dc1", "--cassandra.servers=cassandra"]
       ports:
         - "16686:16686"
@@ -28,6 +30,7 @@ services:
 
     jaeger-agent:
       image: jaegertracing/jaeger-agent
+      container_name: jeager-agent
       command: ["--reporter.grpc.host-port=jaeger-collector:14250"]
       ports:
         - "5775:5775/udp"
@@ -40,9 +43,11 @@ services:
 
     cassandra:
       image: cassandra:3.9
+      container_name: cassandra
 
     cassandra-schema:
       image: jaegertracing/jaeger-cassandra-schema
+      container_name: cassandra-schema
       depends_on:
         - cassandra
 
