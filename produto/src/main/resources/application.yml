@@ -24,4 +24,4 @@ opentracing:
   jaeger:
     udp-sender:
       host: ${JEAGER_AGENT:jaeger-agent}
-      port: 6831
+      port: ${JEAGER_PORT:6831}

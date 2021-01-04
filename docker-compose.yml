@@ -29,6 +29,7 @@ services:
       - 14268:14268
       - 14250:14250
       - 9411:9411
+    command: ["--cassandra.span-store-write-cache-ttl=0h1m5s"]
     environment:
       - SPAN_STORAGE_TYPE=cassandra
       - CASSANDRA_SERVERS=cassandra
@@ -66,13 +67,16 @@ services:
   #   ports:
   #     - 8081:8081
   
-  # produto:
-  #   image: diegolirio/produto:0.0.1-SNAPSHOT
-  #   container_name: produto
-  #   ports:
-  #     - 8080:8080
-  #   networks:
-  #     - jaeger      
+  produto:
+    image: diegolirio/produto:0.0.2-SNAPSHOT
+    container_name: produto
+    ports:
+      - 8080:8080
+    networks:
+      - jaeger      
+    environment:
+      - JEAGER_AGENT=jeager
+      - JEAGER_PORT=6831
 
   # prometheus:
   #   image: prom/prometheus:latest

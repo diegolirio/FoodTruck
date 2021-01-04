@@ -56,3 +56,6 @@ services:
       container_name: produto
       ports:
         - 8080:8080
+      # environment:
+      #   - JEAGER_AGENT=jeager
+      #   - JEAGER_PORT=6831        
