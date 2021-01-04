@@ -50,6 +50,9 @@ services:
       container_name: cassandra-schema
       depends_on:
         - cassandra
+      environment:
+        - TRACE_TTL=30
+
 
     produto:
       image: diegolirio/produto:0.0.2-SNAPSHOT
