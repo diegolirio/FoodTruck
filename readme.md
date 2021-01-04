@@ -57,3 +57,17 @@ cqlsh> select operation_name, ttl(trace_id) from jaeger_v1_dc1.service_operation
         getById |        172795
         getById |        170732
 ```		
+
+```sh
+cqlsh> insert into jaeger_v1_dc1.service_operation_index (service_name, operation_name, start_time, trace_id) values ('produto', 'getById', 1609780387080000, 0x000000000000000072bed4789a519110) using ttl 15;
+```
+
+```sh
+cqlsh> select operation_name, ttl(trace_id) from jaeger_v1_dc1.service_operation_index;
+
+ operation_name | ttl(trace_id)
+----------------+---------------
+        getById |        172578
+        getById |            10
+        getById |        170515
+```		
