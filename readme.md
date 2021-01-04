@@ -26,6 +26,10 @@ https://howtodoinjava.com/spring-cloud/spring-cloud-zipkin-sleuth-tutorial/
 ### Cassandra 
 
 ```sh
+sudo docker-compose -f docker-compose.separed.yml up 
+```
+
+```sh
 sudo docker exec -it d2d786706ef8_cassandra bash
 cqlsh
 cqlsh> describe tables;
