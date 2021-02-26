@@ -44,6 +44,7 @@ services:
 
 opentracing:
   jaeger:
+    service-name: food-truck
     log-spans: true
     #enable-b3-propagation: true
     udp-sender:
